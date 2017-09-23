@@ -4,6 +4,16 @@ export function spacing(modifier = 1) {
     return `${modifier * 10}px`;
 }
 
+export const fontFamily = css`
+    font-family: Lato, sans-serif;
+    -webkit-font-smoothing: antialiased;
+`;
+
+export const colors = {
+    teal: '#009688',
+    white: '#FFFFFF'
+};
+
 export const MAX_APP_WIDTH = '1367px';
 
 // reference: https://github.com/styled-components/styled-components/blob/master/docs/tips-and-tricks.md#media-templates
