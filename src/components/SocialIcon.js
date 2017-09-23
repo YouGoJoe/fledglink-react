@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import styled, { css } from 'styled-components';
+import React from 'react';
+import styled from 'styled-components';
 
-import { spacing, media } from '../styles';
+import { spacing } from '../styles';
 
 import EmailIcon from '../assets/email icon.png';
 import TwitterIcon from '../assets/Twitter icon.png';
