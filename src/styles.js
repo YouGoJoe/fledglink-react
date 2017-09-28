@@ -12,6 +12,7 @@ export const fontFamily = css`
 export const colors = {
   teal: '#009688',
   white: '#FFFFFF',
+  grey: '#F2F2F2',
 };
 
 export const MAX_APP_WIDTH = '1367px';
