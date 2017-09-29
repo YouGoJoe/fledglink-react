@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
+import Links from './Links';
+import Button from './Button';
+
 import { colors, spacing } from '../styles';
+
+const MAX_DESCRIPTION_LENGTH = 65;
 
 const EpisodeContainer = styled.div`
   ${props => props.isGrey && css`background-color: ${colors.grey};`};
 `;
 
 const CollapsedEpisode = styled.div`
+  display: flex;
+  align-items: center;
+
   color: ${colors.teal};
   font-weight: bold;
   padding: ${spacing()};
@@ -18,14 +26,22 @@ const ExpandedEpisode = styled.div`
   flex-direction: column;
 `;
 
-const EpisodeLinkList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-`;
+const ExtendedButton = styled(Button)`margin: 0 ${spacing()};`;
 
-const EpisodeLink = styled.li`margin: ${spacing(1.5)} ${spacing(2)};`;
+const EpisodeContentContainer = styled.span`margin: ${spacing(1.5)} 0;`;
+
+const MaterialIcon = styled.i`color: ${colors.teal};`;
 
 export default class Episode extends Component {
+  constructor() {
+    super();
+    this.state = { isCollapsed: true };
+  }
+
+  toggleCollapsed() {
+    this.setState(prevState => ({ isCollapsed: !prevState.isCollapsed }));
+  }
+
   render() {
     const {
       podcast: { title, description, notes, source, id },
@@ -33,30 +49,34 @@ export default class Episode extends Component {
       onEpisodeClick,
       ...rest
     } = this.props;
+    const { isCollapsed } = this.state;
     return (
       <EpisodeContainer {...rest}>
         {isSelected ? (
           <ExpandedEpisode>
             <h2>{title}</h2>
-            <p>{description}</p>
-
-            {notes.length !== 0 && (
-              <span>
-                <strong>Episode Links</strong>
-                <EpisodeLinkList>
-                  {notes.map((note, index) => (
-                    <EpisodeLink key={index}>
-                      <a href={note.link} target="_blank">
-                        {note.name}
-                      </a>
-                    </EpisodeLink>
-                  ))}
-                </EpisodeLinkList>
-              </span>
+            {isCollapsed ? (
+              <p>
+                <span>{`${description.substring(0, MAX_DESCRIPTION_LENGTH)}...`}</span>
+                <ExtendedButton clear onClick={() => this.toggleCollapsed()}>
+                  More Info
+                </ExtendedButton>
+              </p>
+            ) : (
+              <EpisodeContentContainer>
+                <p>{description}</p>
+                <Links notes={notes} />
+                <ExtendedButton clear onClick={() => this.toggleCollapsed()}>
+                  Less Info
+                </ExtendedButton>
+              </EpisodeContentContainer>
             )}
           </ExpandedEpisode>
         ) : (
-          <CollapsedEpisode onClick={() => onEpisodeClick(id)}>{title}</CollapsedEpisode>
+          <CollapsedEpisode onClick={() => onEpisodeClick(id)}>
+            <MaterialIcon className="material-icons">play_circle_filled</MaterialIcon>
+            <span>{title}</span>
+          </CollapsedEpisode>
         )}
       </EpisodeContainer>
     );
